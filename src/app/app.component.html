@@ -5,18 +5,26 @@
 <!-- <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onSelectLocation($event)">
     <agm-marker *ngFor="let marker of markerLocations; let i = index" [latitude]="marker[i].lat" [longitude]="marker[i].lng"></agm-marker>
 </agm-map> -->
-
-<agm-map [latitude]="location.latitude" [longitude]="location.longitude" [zoom]="location.zoom"
-    (mapClick)="addMarker($event.coords.lat, $event.coords.lng)">
-    <agm-marker *ngFor="let marker of location.markers" [latitude]="marker.lat" [longitude]="marker.lng"
-        (markerClick)="selectMarker($event)" [markerDraggable]="true" (dragEnd)="markerDragEnd(coords, $event)"
-        >
-    </agm-marker>
-</agm-map>
-<!-- <div>
+<form>
+    <agm-map [latitude]="location.latitude" [longitude]="location.longitude" [zoom]="location.zoom"
+        (mapClick)="addMarker($event.coords.lat, $event.coords.lng, '')">
+        <agm-marker *ngFor="let marker of location.markers; let i = index;" [latitude]="marker.lat" [longitude]="marker.lng"
+            (markerClick)="selectMarker($event)" [markerDraggable]="true" (dragEnd)="markerDragEnd(coords, $event)">
+            <!-- [label]="marker.label" -->
+            <agm-info-window #infowindow>
+                <input #label id="label" name="label + {{i}}" class="form-control" type="text" [value]="marker.label"
+                    (value)="aah">
+                <input #labelButton class="btn btn-primary" type="button" value="Αποθήκευση"
+                    (click)="onUpdateLocationMarkers(label.value, i)">
+            </agm-info-window>
+        </agm-marker>
+    </agm-map>
+    <!-- <div>
     Selected Marker is: Longitude {{selectedMarker.lat}} Latitude {{selectedMarker.lng}}
 </div> -->
-<div>
-    <input type="button" value="Aποθήκευση συντεταγμένων" (click)="onPostLocationMarkers()">
-    <input type="button" value="Ανάκτηση συντεταγμένων" (click)="onGetLocationMarkers()">
-</div>
+    <div>
+        <input class="btn btn-primary" type="button" value="Aποθήκευση συντεταγμένων" (click)="onPostLocationMarkers()">
+        <input class="btn btn-primary" type="button" value="Ανάκτηση συντεταγμένων" (click)="onGetLocationMarkers()">
+    </div>
+</form>
+<br>

@@ -5,6 +5,7 @@ import { Marker } from './models/marker.model';
 import { Location } from './models/location.model';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { title } from 'process';
 
 @Component({
   selector: 'app-root',
@@ -22,20 +23,23 @@ export class AppComponent implements OnInit {
   selectedMarker: Marker;
   readonly rootURL = 'https://map-web-app-294820.firebaseio.com/savedLocations.json';
 
+  aah = title;
+
   constructor(private map: MapsService, private http: HttpClient) { }
 
   ngOnInit() {
     //this.setCurrentPosition();    //Vres aut;omata tin topothesia
 
     this.location = {
-      latitude: -28.68352,
-      longitude: -147.20785,
+      latitude: 37.99999556142096,
+      longitude: 23.829345470004057,
       mapType: "satelite",
       zoom: 5,
       markers: [
         {
-          lat: -28.68352,
-          lng: -147.20785
+          lat: 37.99999556142096,
+          lng: 23.829345470004057,
+          label: "Athens"
         }
       ]
     }
@@ -51,21 +55,27 @@ export class AppComponent implements OnInit {
   //   console.log(this.markerLocations);
   // }
 
-  addMarker(lat: number, lng: number) {
+  addMarker(lat: number, lng: number, label: string) {
     this.location.markers.push({
       lat,
       lng,
-      //label: this.getAddress(lat, lng)
+      label //: 'lalala' //Date.now().toLocaleString()
     })
     console.log('irthaaaaaaaaaaaaaaaaaaaa');
   }
 
-  // selectMarker(event) {
-  //   this.selectedMarker = {
-  //     lat: event.latitude,
-  //     lng: event.longitude
-  //   }
-  // }
+  onUpdateLocationMarkers(label, i) {
+    this.location.markers[i].label = label;
+    console.log(this.location.markers[i].label);
+  }
+
+  selectMarker(event) {
+    this.selectedMarker = {
+      lat: event.latitude,
+      lng: event.longitude,
+      label: 'hurray!'
+    }
+  }
 
   markerDragEnd(coords: any, $event: MouseEvent) {
     this.location.latitude = coords.latitude
@@ -97,6 +107,7 @@ export class AppComponent implements OnInit {
   // }
 
   onPostLocationMarkers() {
+    //this.location.markers['label'] = label;
     this.map.postLocationMarkers(this.location).subscribe(
       res => {
         if ((res != null) || (res != undefined)) {
@@ -130,9 +141,9 @@ export class AppComponent implements OnInit {
             for (const marker of markers) {
               const resObj = new Location();
 
-              console.log(marker.lat, marker.lng);
+              console.log(marker.lat, marker.lng, marker.label);
 
-              this.addMarker(marker.lat, marker.lng);
+              this.addMarker(marker.lat, marker.lng, marker.label);
             }
           }
 
