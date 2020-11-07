@@ -119,8 +119,17 @@
               "devServerTarget": "map-web-app:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@netlify-builder/deploy:deploy",
+          "options": {
+            "outputPath": "dist/map-web-app",
+            "netlifyToken": "",
+            "siteId": "d770c8f6-a914-4485-9c14-1ae0734d3398"
+          }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "map-web-app"
 }
