@@ -7,14 +7,22 @@
 </agm-map> -->
 <form>
 
-    <div class="col-md-6 mb-3">
+    <div class="input-group">
             <label for="validationTooltip03">Εισάγετε περιοχή αναζήτησης</label>
-            <input #search type="text" class="form-control" id="validationTooltip03" placeholder="Περιοχή ή διεύθυνση" required (keydown.enter)="$event.preventDefault()">
+            <!-- <input #search type="text" class="form-control" id="validationTooltip03" placeholder="Περιοχή ή διεύθυνση" required (keydown.enter)="$event.preventDefault()"> -->
+             <div class="input-group">
+                <input #search type="text" class="form-control" id="validationTooltip03" placeholder="Περιοχή ή διεύθυνση" required (keydown.enter)="$event.preventDefault()">
+                <div class="input-group-btn">
+                  <button class="btn btn-default" type="button" (click)="saveLocation(search.value)">
+                    <i class="glyphicon glyphicon-search"></i>
+                  </button>
+                </div>
+              </div>
             <div class="invalid-tooltip">
               Παρακαλώ εισάγετε μία έγκυρη περιοχή.
             </div>
     </div> 
-    <br><br><br><br>
+    <br>
 
     <agm-map [latitude]="location.latitude" [longitude]="location.longitude" [zoom]="location.zoom"
         (mapClick)="addMarker($event.coords.lat, $event.coords.lng, '')">

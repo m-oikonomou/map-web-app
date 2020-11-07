@@ -53,8 +53,8 @@ export class AppComponent implements OnInit {
 
     this.onGetLocationMarkers();
 
-     //load Places Autocomplete
-     this.mapsAPILoader.load().then(() => {
+    //load Places Autocomplete
+    this.mapsAPILoader.load().then(() => {
       this.setCurrentLocation();
       this.geoCoder = new google.maps.Geocoder;
 
@@ -224,7 +224,7 @@ export class AppComponent implements OnInit {
     //   console.log(data);
     // });
 
-      this.location.markers[i] = {
+    this.location.markers[i] = {
       lat: 0,
       lng: 0,
       label: '' //Date.now().toLocaleString()
@@ -243,7 +243,17 @@ export class AppComponent implements OnInit {
     // }
 
     this.infoWindowView = numView;
-    
+
+  }
+
+  saveLocation() {
+    const data = {
+      address: this.address,
+      latitude: this.lat,
+      longitude: this.lng
+    }
+    this.addMarker(data.latitude, data.longitude, '');
+    //this.activeModal.close(data);
   }
 
 }
