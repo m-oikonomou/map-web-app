@@ -13,7 +13,7 @@
              <div class="input-group">
                 <input #search type="text" class="form-control" id="validationTooltip03" placeholder="Περιοχή ή διεύθυνση" required (keydown.enter)="$event.preventDefault()">
                 <div class="input-group-btn">
-                  <button class="btn btn-default" type="button" (click)="saveLocation(search.value)">
+                  <button class="btn btn-default" type="button" (click)="saveLocation()">
                     <i class="glyphicon glyphicon-search"></i>
                   </button>
                 </div>
@@ -32,7 +32,7 @@
             (dragEnd)="markerDragEnd(coords, $event)">
             <!-- [label]="marker.label" -->
             <agm-info-window #infowindow>
-                <input #label id="label" name="label + {{i}}" class="form-control" type="text" [value]="marker.label" (value)="aah">
+                <input #label id="label" name="label + {{i}}" class="form-control" type="text" [value]="marker.label">
                 <input #labelButton class="btn btn-primary btn-sm" type="button" value="Αποθήκευση"
                     (click)="onUpdateLocationMarkers(label.value, i)">
                 <!-- <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"
@@ -43,9 +43,7 @@
         </agm-marker>
 
     </agm-map>
-    <!-- <div>
-    Selected Marker is: Longitude {{selectedMarker.lat}} Latitude {{selectedMarker.lng}}
-</div> -->
+   
     <div>
         <input class="btn btn-primary" type="button" value="Aποθήκευση συντεταγμένων" (click)="onPostLocationMarkers()">
         <input class="btn btn-primary" type="button" value="Ανάκτηση συντεταγμένων" (click)="onGetLocationMarkers()">

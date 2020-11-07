@@ -18,19 +18,15 @@ export class AppComponent implements OnInit {
   lat;
   lng;
   zoom: number;
-  coordinates;
   markerLocations = [];
   location: Location;
   savedLocations: Array<Location> = [];
   selectedMarker: Marker;
-  readonly rootURL = 'https://map-web-app-294820.firebaseio.com/savedLocations.json';
-
-  aah = title;
   infoWindowView: number = 1;
-
   address: string;
   private geoCoder;
   @ViewChild('search') public searchElementRef: ElementRef;
+  readonly rootURL = 'https://map-web-app-294820.firebaseio.com/savedLocations.json';
 
   constructor(private map: MapsService, private http: HttpClient, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
 
@@ -88,8 +84,20 @@ export class AppComponent implements OnInit {
         this.getAddress(this.lat, this.lng);
       });
     }
+    this.location = {
+      latitude: this.lat,
+      longitude: this.lng,
+      mapType: "satelite",
+      zoom: 6,
+      markers: [
+        {
+          lat: this.lat,
+          lng: this.lng,
+          label: ''
+        }
+      ]
+    }
   }
-
 
   // onSelectLocation(event) {
   //   this.lat = event.coords.lat;
@@ -147,35 +155,11 @@ export class AppComponent implements OnInit {
     });
   }
 
-  // setCurrentPosition() {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(position => {
-  //       const { latitude, longitude } = position
-  //       this.location = {
-  //         latitude,
-  //         longitude,
-  //         mapType: "satelite",
-  //         zoom: 14,
-  //         markers: [
-  //           {
-  //             lat: longitude,
-  //             lng: latitude,
-  //             //label: "My current position"
-  //           }
-  //         ]
-  //       }
-  //     });
-  //   } else {
-  //     alert("Geolocation is not supported by this browser, please use google chrome.");
-  //   }
-  // }
-
   onPostLocationMarkers() {
-    //this.location.markers['label'] = label;
     this.map.postLocationMarkers(this.location).subscribe(
       res => {
         if ((res != null) || (res != undefined)) {
-
+          
         }
       },
       err => {
@@ -243,7 +227,6 @@ export class AppComponent implements OnInit {
     // }
 
     this.infoWindowView = numView;
-
   }
 
   saveLocation() {
@@ -252,8 +235,22 @@ export class AppComponent implements OnInit {
       latitude: this.lat,
       longitude: this.lng
     }
-    this.addMarker(data.latitude, data.longitude, '');
-    //this.activeModal.close(data);
+
+    this.location = {
+      latitude: data.latitude,
+      longitude: data.longitude,
+      mapType: "satelite",
+      zoom: 12,
+      markers: [
+        {
+          lat: data.latitude,
+          lng: data.longitude,
+          label: data.address
+        }
+      ]
+    }
+
+    this.addMarker(data.latitude, data.longitude, data.address);
   }
 
 }
