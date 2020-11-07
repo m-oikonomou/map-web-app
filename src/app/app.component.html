@@ -1,4 +1,4 @@
-<h1>{{ title }}</h1>
+<h1 styles="text-align: center;">{{ title }}</h1>
 
 <!-- this creates a google map on the page with the given lat/lng from -->
 <!-- the component as the initial center of the map: -->
@@ -6,8 +6,19 @@
     <agm-marker *ngFor="let marker of markerLocations; let i = index" [latitude]="marker[i].lat" [longitude]="marker[i].lng"></agm-marker>
 </agm-map> -->
 <form>
+
+    <div class="col-md-6 mb-3">
+            <label for="validationTooltip03">Εισάγετε περιοχή αναζήτησης</label>
+            <input #search type="text" class="form-control" id="validationTooltip03" placeholder="Περιοχή ή διεύθυνση" required (keydown.enter)="$event.preventDefault()">
+            <div class="invalid-tooltip">
+              Παρακαλώ εισάγετε μία έγκυρη περιοχή.
+            </div>
+    </div> 
+    <br><br><br><br>
+
     <agm-map [latitude]="location.latitude" [longitude]="location.longitude" [zoom]="location.zoom"
         (mapClick)="addMarker($event.coords.lat, $event.coords.lng, '')">
+
         <agm-marker *ngFor="let marker of location.markers; let i = index;" [latitude]="marker.lat"
             [longitude]="marker.lng" (markerClick)="selectMarker($event)" [markerDraggable]="true"
             (dragEnd)="markerDragEnd(coords, $event)">
@@ -22,6 +33,7 @@
                     (click)="onDeleteLocationMarkers(i)">
             </agm-info-window>
         </agm-marker>
+
     </agm-map>
     <!-- <div>
     Selected Marker is: Longitude {{selectedMarker.lat}} Latitude {{selectedMarker.lng}}
@@ -32,6 +44,8 @@
     </div>
 </form>
 <br>
+
+
 
 
 <!-- <label *ngIf="infoWindowView === 0" #label name="label + {{i}}" [value]="marker.label">{{ marker.label }}</label> <br>

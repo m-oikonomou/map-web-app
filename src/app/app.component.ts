@@ -1,11 +1,12 @@
 //import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { MapsService } from './maps.service';
 import { Marker } from './models/marker.model';
 import { Location } from './models/location.model';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { title } from 'process';
+import { MapsAPILoader, MouseEvent } from '@agm/core';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
   title = 'Courier web map';
   lat;
   lng;
+  zoom: number;
   coordinates;
   markerLocations = [];
   location: Location;
@@ -26,7 +28,11 @@ export class AppComponent implements OnInit {
   aah = title;
   infoWindowView: number = 1;
 
-  constructor(private map: MapsService, private http: HttpClient) { }
+  address: string;
+  private geoCoder;
+  @ViewChild('search') public searchElementRef: ElementRef;
+
+  constructor(private map: MapsService, private http: HttpClient, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
 
   ngOnInit() {
     //this.setCurrentPosition();    //Vres aut;omata tin topothesia
@@ -46,6 +52,42 @@ export class AppComponent implements OnInit {
     }
 
     this.onGetLocationMarkers();
+
+     //load Places Autocomplete
+     this.mapsAPILoader.load().then(() => {
+      this.setCurrentLocation();
+      this.geoCoder = new google.maps.Geocoder;
+
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
+      autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+
+          //set latitude, longitude and zoom
+          this.lat = place.geometry.location.lat();
+          this.lng = place.geometry.location.lng();
+          this.zoom = 12;
+        });
+      });
+    });
+  }
+
+  // Get Current Location Coordinates
+  private setCurrentLocation() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+        this.zoom = 8;
+        this.getAddress(this.lat, this.lng);
+      });
+    }
   }
 
 
@@ -81,9 +123,28 @@ export class AppComponent implements OnInit {
   }
 
   markerDragEnd(coords: any, $event: MouseEvent) {
-    this.location.latitude = coords.latitude
-    this.location.longitude = coords.longitude
+    this.location.latitude = $event.coords.lat;
+    this.location.longitude = $event.coords.lng;
+    this.getAddress(this.lat, this.lng);
     console.log(this.location);
+  }
+
+  getAddress(latitude, longitude) {
+    this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
+      console.log(results);
+      console.log(status);
+      if (status === 'OK') {
+        if (results[0]) {
+          this.zoom = 12;
+          this.address = results[0].formatted_address;
+        } else {
+          window.alert('No results found');
+        }
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+      }
+
+    });
   }
 
   // setCurrentPosition() {
