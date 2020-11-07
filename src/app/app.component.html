@@ -8,14 +8,18 @@
 <form>
     <agm-map [latitude]="location.latitude" [longitude]="location.longitude" [zoom]="location.zoom"
         (mapClick)="addMarker($event.coords.lat, $event.coords.lng, '')">
-        <agm-marker *ngFor="let marker of location.markers; let i = index;" [latitude]="marker.lat" [longitude]="marker.lng"
-            (markerClick)="selectMarker($event)" [markerDraggable]="true" (dragEnd)="markerDragEnd(coords, $event)">
+        <agm-marker *ngFor="let marker of location.markers; let i = index;" [latitude]="marker.lat"
+            [longitude]="marker.lng" (markerClick)="selectMarker($event)" [markerDraggable]="true"
+            (dragEnd)="markerDragEnd(coords, $event)">
             <!-- [label]="marker.label" -->
             <agm-info-window #infowindow>
-                <input #label id="label" name="label + {{i}}" class="form-control" type="text" [value]="marker.label"
-                    (value)="aah">
-                <input #labelButton class="btn btn-primary" type="button" value="Αποθήκευση"
+                <input #label id="label" name="label + {{i}}" class="form-control" type="text" [value]="marker.label" (value)="aah">
+                <input #labelButton class="btn btn-primary btn-sm" type="button" value="Αποθήκευση"
                     (click)="onUpdateLocationMarkers(label.value, i)">
+                <!-- <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"
+                    (click)="onChangeInfoWindowView(i)">>></a> -->
+                <input #removeMarkButton class="btn btn-danger btn-sm" type="button" value="Διαγραφή πινέζας"
+                    (click)="onDeleteLocationMarkers(i)">
             </agm-info-window>
         </agm-marker>
     </agm-map>
@@ -28,3 +32,18 @@
     </div>
 </form>
 <br>
+
+
+<!-- <label *ngIf="infoWindowView === 0" #label name="label + {{i}}" [value]="marker.label">{{ marker.label }}</label> <br>
+<a *ngIf="infoWindowView === 0" href="#" class="" role="button" style="float: right;" aria-pressed="true" (click)="onChangeInfoWindowView(i, 1)">Edit >></a>
+
+<input *ngIf="infoWindowView === 1" #textBox id="text" name="text + {{i}}" class="form-control input-sm" type="text" [value]="marker.label" (value)="marker.label">
+<input *ngIf="infoWindowView === 1" #textButton class="btn btn-primary btn-sm" type="button" value="Αποθήκευση"
+    (click)="onUpdateLocationMarkers(textBox.value, i)"><br>
+<a *ngIf="infoWindowView === 1" href="#" class="active" style="float: left;" role="button" aria-pressed="true" (click)="onChangeInfoWindowView(i, 0)"><< Back</a>
+<a *ngIf="infoWindowView === 1" href="#" class="active" style="float: right;" role="button" aria-pressed="true" (click)="onChangeInfoWindowView(i, 2)">More options >></a>
+
+<input *ngIf="infoWindowView === 2" #removeMarkButton class="btn btn-danger btn-sm" type="button" value="Διαγραφή πινέζας"
+    (click)="onDeleteLocationMarkers(i)"><br>
+<a *ngIf="infoWindowView === 2" href="#" class="" role="button" style="float: left;" aria-pressed="true" (click)="onChangeInfoWindowView(i, 1)"><< Back</a> -->
+

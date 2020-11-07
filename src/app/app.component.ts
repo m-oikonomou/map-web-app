@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
   readonly rootURL = 'https://map-web-app-294820.firebaseio.com/savedLocations.json';
 
   aah = title;
+  infoWindowView: number = 1;
 
   constructor(private map: MapsService, private http: HttpClient) { }
 
@@ -64,9 +65,11 @@ export class AppComponent implements OnInit {
     console.log('irthaaaaaaaaaaaaaaaaaaaa');
   }
 
-  onUpdateLocationMarkers(label, i) {
+  onUpdateLocationMarkers(label: string, i: number) {
     this.location.markers[i].label = label;
     console.log(this.location.markers[i].label);
+
+    this.infoWindowView = 0;
   }
 
   selectMarker(event) {
@@ -133,7 +136,7 @@ export class AppComponent implements OnInit {
       (res: any) => {
         if ((res != null) || (res != undefined)) {
           //console.log(res);
-         
+
           const responseData = new Array<Location>(...res);
 
           for (const data of responseData) {
@@ -155,5 +158,31 @@ export class AppComponent implements OnInit {
     )
   }
 
+  onDeleteLocationMarkers(i: number) {
+    // this.http.delete(this.rootURL + this.location.markers[i]).subscribe(data => {
+    //   console.log(data);
+    // });
+
+      this.location.markers[i] = {
+      lat: 0,
+      lng: 0,
+      label: '' //Date.now().toLocaleString()
+    };
+  }
+
+  onChangeInfoWindowView(i: number, numView: number) {
+    // if (this.infoWindowView == 0) {
+    //   this.infoWindowView = 1;
+    // }
+    // else if (this.infoWindowView == 1) {
+    //   this.infoWindowView = 2;
+    // }
+    // else if (this.infoWindowView = 2) {
+    //   this.infoWindowView = 0;
+    // }
+
+    this.infoWindowView = numView;
+    
+  }
 
 }
