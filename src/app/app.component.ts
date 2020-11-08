@@ -31,8 +31,6 @@ export class AppComponent implements OnInit {
   constructor(private map: MapsService, private http: HttpClient, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
 
   ngOnInit() {
-    //this.setCurrentPosition();    //Vres aut;omata tin topothesia
-
     this.location = {
       latitude: 37.99999556142096,
       longitude: 23.829345470004057,

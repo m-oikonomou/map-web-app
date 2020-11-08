@@ -1,56 +1,70 @@
-<h1 styles="text-align: center;">{{ title }}</h1>
-
-<!-- this creates a google map on the page with the given lat/lng from -->
-<!-- the component as the initial center of the map: -->
-<!-- <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onSelectLocation($event)">
-    <agm-marker *ngFor="let marker of markerLocations; let i = index" [latitude]="marker[i].lat" [longitude]="marker[i].lng"></agm-marker>
-</agm-map> -->
-<form>
-
-    <div class="input-group">
-            <label for="validationTooltip03">Εισάγετε περιοχή αναζήτησης</label>
-            <!-- <input #search type="text" class="form-control" id="validationTooltip03" placeholder="Περιοχή ή διεύθυνση" required (keydown.enter)="$event.preventDefault()"> -->
-             <div class="input-group">
-                <input #search type="text" class="form-control" id="validationTooltip03" placeholder="Περιοχή ή διεύθυνση" required (keydown.enter)="$event.preventDefault()">
-                <div class="input-group-btn">
-                  <button class="btn btn-default" type="button" (click)="saveLocation()">
-                    <i class="glyphicon glyphicon-search"></i>
-                  </button>
-                </div>
-              </div>
-            <div class="invalid-tooltip">
-              Παρακαλώ εισάγετε μία έγκυρη περιοχή.
+<div style="background-color: #ebffdd;">
+    <nav class="navbar navbar-inverse" style="min-width: 30rem;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">{{ title }}</a>
             </div>
-    </div> 
-    <br>
+            <ul class="nav navbar-nav">
+                <li class="active" style="max-width: 7rem;"><a href="https://github.com/m-oikonomou/map-web-app">About</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active" style="float: right; padding: 0rem 3rem; background-color: black;"><a href="https://github.com/m-oikonomou/"><i>Follow me on &nbsp;&nbsp;</i><img
+                            style="max-width: 2rem;"
+                            src="data:image/png;base64,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" /></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-    <agm-map [latitude]="location.latitude" [longitude]="location.longitude" [zoom]="location.zoom"
-        (mapClick)="addMarker($event.coords.lat, $event.coords.lng, '')">
+    <form class="container">
+        <div class="input-group">
+            <label for="validationTooltip03" style="text-align: center;">Εισάγετε περιοχή αναζήτησης</label>
+            <!-- <input #search type="text" class="form-control" id="validationTooltip03" placeholder="Περιοχή ή διεύθυνση" required (keydown.enter)="$event.preventDefault()"> -->
+            <div class="input-group" style="width: 60rem; position: center;">
+                <input #search type="text" class="form-control" id="validationTooltip03"
+                    placeholder="Περιοχή ή διεύθυνση" required (keydown.enter)="$event.preventDefault()">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="button" (click)="saveLocation()">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="invalid-tooltip">
+                Παρακαλώ εισάγετε μία έγκυρη περιοχή.
+            </div>
+        </div>
+        <br>
 
-        <agm-marker *ngFor="let marker of location.markers; let i = index;" [latitude]="marker.lat"
-            [longitude]="marker.lng" (markerClick)="selectMarker($event)" [markerDraggable]="true"
-            (dragEnd)="markerDragEnd(coords, $event)">
-            <!-- [label]="marker.label" -->
-            <agm-info-window #infowindow>
-                <input #label id="label" name="label + {{i}}" class="form-control" type="text" [value]="marker.label">
-                <input #labelButton class="btn btn-primary btn-sm" type="button" value="Αποθήκευση"
-                    (click)="onUpdateLocationMarkers(label.value, i)">
-                <!-- <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"
+        <agm-map [latitude]="location.latitude" [longitude]="location.longitude" [zoom]="location.zoom"
+            (mapClick)="addMarker($event.coords.lat, $event.coords.lng, '')">
+
+            <agm-marker *ngFor="let marker of location.markers; let i = index;" [latitude]="marker.lat"
+                [longitude]="marker.lng" (markerClick)="selectMarker($event)" [markerDraggable]="true"
+                (dragEnd)="markerDragEnd(coords, $event)">
+                <!-- [label]="marker.label" -->
+                <agm-info-window #infowindow>
+                    <input #label id="label" name="label + {{i}}" class="form-control" type="text"
+                        [value]="marker.label">
+                    <input #labelButton class="btn btn-primary btn-sm" type="button" value="Αποθήκευση"
+                        (click)="onUpdateLocationMarkers(label.value, i)">
+                    <!-- <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"
                     (click)="onChangeInfoWindowView(i)">>></a> -->
-                <input #removeMarkButton class="btn btn-danger btn-sm" type="button" value="Διαγραφή πινέζας"
-                    (click)="onDeleteLocationMarkers(i)">
-            </agm-info-window>
-        </agm-marker>
+                    <input #removeMarkButton class="btn btn-danger btn-sm" type="button" value="Διαγραφή πινέζας"
+                        (click)="onDeleteLocationMarkers(i)">
+                </agm-info-window>
+            </agm-marker>
 
-    </agm-map>
-   
-    <div>
-        <input class="btn btn-primary" type="button" value="Aποθήκευση συντεταγμένων" (click)="onPostLocationMarkers()">
-        <input class="btn btn-primary" type="button" value="Ανάκτηση συντεταγμένων" (click)="onGetLocationMarkers()">
-    </div>
-</form>
-<br>
-
+        </agm-map>
+        <br>
+        <div>
+            <input class="btn btn-primary" type="button" value="Aποθήκευση συντεταγμένων"
+                (click)="onPostLocationMarkers()"> &nbsp;&nbsp;&nbsp;&nbsp;
+            <input class="btn btn-primary" type="button" value="Ανάκτηση συντεταγμένων"
+                (click)="onGetLocationMarkers()">
+        </div>
+    </form>
+    <br>
+</div>
 
 
 
@@ -66,4 +80,3 @@
 <input *ngIf="infoWindowView === 2" #removeMarkButton class="btn btn-danger btn-sm" type="button" value="Διαγραφή πινέζας"
     (click)="onDeleteLocationMarkers(i)"><br>
 <a *ngIf="infoWindowView === 2" href="#" class="" role="button" style="float: left;" aria-pressed="true" (click)="onChangeInfoWindowView(i, 1)"><< Back</a> -->
-
